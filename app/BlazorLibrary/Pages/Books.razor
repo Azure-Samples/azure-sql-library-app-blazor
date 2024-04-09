@@ -1,0 +1,32 @@
+@page "/books"
+
+<PageTitle>Books</PageTitle>
+
+<h1>Books</h1>
+<p>This component lists all books from DAB using GraphQL.</p>
+<a href="@($"/addbook")" class="btn btn-success">Create new book</a>
+<UseGetBooks Context="result">
+    <ChildContent>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Year</th>
+                    <th>Pages</th>
+                    <th>Author(s)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var book in result.Books.Items)
+                {
+                    <tr>
+                        <td>@book.Title</td>
+                        <td>@book.Year</td>
+                        <td>@book.Pages</td>
+                        <td>@string.Join(", ", book.Authors.Items.Select(a => $"{a.First_name} {a.Last_name}"))</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </ChildContent>
+</UseGetBooks>

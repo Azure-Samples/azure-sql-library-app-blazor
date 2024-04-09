@@ -1,0 +1,66 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Run DAB",
+            "type": "shell",
+            "command": "dab start --config=dab.config.json --no-https-redirect",
+            "options": {
+                "cwd": "${workspaceFolder}/dab"
+            }
+        },
+        {
+            "label": "Build SQL Database project",
+            "type": "shell",
+            "command": "dotnet build",
+            "options": {
+                "cwd": "${workspaceFolder}/database/Library"
+            }
+        },
+        {
+            "label": "Build Blazor project",
+            "type": "shell",
+            "command": "dotnet build",
+            "options": {
+                "cwd": "${workspaceFolder}/app/BlazorLibrary"
+            }
+        },
+        {
+            "label": "Trust HTTPS certificate for Blazor project",
+            "type": "shell",
+            "command": "dotnet dev-certs https --trust",
+            "options": {
+                "cwd": "${workspaceFolder}/app/BlazorLibrary"
+            }
+        },
+        {
+            "label": "Run Blazor project",
+            "type": "shell",
+            "command": "dotnet watch run",
+            "options": {
+                "cwd": "${workspaceFolder}/app/BlazorLibrary"
+            }
+        },
+        {
+            "label": "Execute SQL Query",
+            "type": "shell",
+            "command": "code",
+            "args": [
+                "--goto",
+                "${workspaceFolder}/scripts/verifyDatabase.sql",
+                "ms-mssql.mssql",
+                "mssql.execute"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            }
+        }
+    ]
+}

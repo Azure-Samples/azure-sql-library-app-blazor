@@ -1,0 +1,152 @@
+@page "/authordetails"
+@page "/authordetails/{id}"
+@using BookManagementApp.Models
+@using BookManagementApp.Services
+@using System.Text.Json
+@inject NavigationManager Navigation
+@inject AuthorService authorService
+
+@if(string.IsNullOrEmpty(Id))
+{
+    <PageTitle>Add New Author</PageTitle>
+    <h3>Author management</h3>
+    <p>Add details for a new author</p>
+}
+else
+{
+    <PageTitle>Edit Author</PageTitle>
+    <h3>Author details</h3>
+    <p>Edit details for a existing author</p>
+}
+
+<div class="row">
+    <EditForm Model="@author" OnValidSubmit="@HandleValidRequest" OnInvalidSubmit="@HandleFailedRequest">
+        <div class="form-group">
+            <label class="col-md-8">First name</label>
+            <InputText class="col-md-8 form-control" @bind-Value="@author.first_name"/>
+        </div>
+        <div class="form-group">
+            <label class="col-md-8">Middle name</label>
+            <InputText class="col-md-8 form-control" @bind-Value="@author.middle_name"/>
+        </div>
+        <div class="form-group">
+            <label class="col-md-8">Last name</label>
+            <InputText class="col-md-8 form-control" @bind-Value="@author.last_name"/>
+        </div>
+        <br/>
+        <div class="form-group">
+            <button type="submit" class="btn btn-success">Save author</button>
+            <a @onclick="GoToAuthors" class="btn btn-primary">Back to authors</a>
+            <a @onclick="@DeleteAuthor" class="btn btn-danger">Delete author</a>
+            @* @if (!string.IsNullOrEmpty(Id))
+            {
+                <a @onclick="@DeleteAuthor" class="btn btn-danger">Delete author</a>
+            } *@
+        </div>
+        <br/>
+        <p style="color: red">@Message</p>
+    </EditForm>
+</div>
+
+@code {
+
+    protected string Message = string.Empty;
+    protected Author author {get; set;} = new Author();
+
+    [Parameter]
+    public string? Id { get; set; }
+    private async Task ManageAuthor()
+    {
+        await authorService.AddAuthorAsync(author);
+        Navigation.NavigateTo("/books");
+    }
+
+    protected void HandleFailedRequest()
+    {
+        Message = "Invalid form data";
+    }
+
+    protected void GoToAuthors()
+    {
+        Navigation.NavigateTo("/authors");
+    }
+
+    protected async Task DeleteAuthor()
+    {
+        if (!string.IsNullOrEmpty(Id))
+        {
+            var authorId = Convert.ToInt32(Id);
+            var result = await authorService.DeleteAuthorAsync(authorId);
+
+            if (result)
+            {
+                Navigation.NavigateTo("/authors");
+            }
+            else
+            {
+                Message = "Failed to delete author";
+            }
+        }
+    }
+
+    protected async override Task OnInitializedAsync()
+    {
+        if (!string.IsNullOrEmpty(Id))
+        {
+            var authorId = Convert.ToInt32(Id);
+            var apiAuthor = await authorService.GetAuthorByIdAsync(authorId);
+            if (apiAuthor != null)
+            {
+                author = apiAuthor;
+                StateHasChanged();
+                Console.WriteLine($"Fetched author: {JsonSerializer.Serialize(author)}");
+            }
+        }
+        else
+        {
+            // Code for adding a new author goes here
+        if (string.IsNullOrEmpty(Id))
+            {
+                var result = await authorService.AddAuthorAsync2(author);
+
+                if (result)
+                    Navigation.NavigateTo("/authors");
+                else
+                    Message = "Failed to add author";
+            }
+            else
+            {
+                author.Id = Convert.ToInt32(Id); // Add this line
+                var result = await authorService.UpdateAuthorAsync(author);
+
+                if (result)
+                    Navigation.NavigateTo("/authors");
+                else
+                    Message = "Failed to update author";
+            }
+        }
+    }
+
+    protected async void HandleValidRequest()
+    {
+        if (string.IsNullOrEmpty(Id))
+        {
+            var result = await authorService.AddAuthorAsync2(author);
+
+            if (result)
+                Navigation.NavigateTo("/authors");
+            else
+                Message = "Failed to add author";
+        }
+        else
+        {
+            author.Id = Convert.ToInt32(Id); // Add this line
+            var result = await authorService.UpdateAuthorAsync(author);
+
+            if (result)
+                Navigation.NavigateTo("/authors");
+            else
+                Message = "Failed to update author";
+        }
+    }
+}

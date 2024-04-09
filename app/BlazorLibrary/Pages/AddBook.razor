@@ -1,0 +1,39 @@
+@page "/addbook"
+@using BookManagementApp.Models
+@using BookManagementApp.Services
+@inject NavigationManager Navigation
+@inject BookService bookService
+
+<h3>Book management</h3>
+<p>Add details for a new book</p>
+
+<form>
+    <div class="form-group">
+        <label for="title">Title</label>
+        <input type="text" id="title" @bind="@book.Title" placeholder="Enter book title" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label for="year">Year</label>
+        <input type="number" id="year" @bind="@book.Year" placeholder="Year published" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label for="pages">Pages</label>
+        <input type="number" id="pages" @bind="@book.Pages" placeholder="Number of pages" class="form-control" />
+    </div>
+</form>
+
+<div>
+    <br>
+    <button @onclick="AddNewBook" class="btn btn-success">Save</button>
+</div>
+
+@code {
+    private Book book = new Book();
+
+    private async Task AddNewBook()
+    {
+        await bookService.AddBookAsync(book);
+        // Optionally, you can navigate to a different page after adding the book
+        Navigation.NavigateTo("/books");
+    }
+}

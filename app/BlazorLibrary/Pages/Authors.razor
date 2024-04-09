@@ -1,0 +1,35 @@
+@page "/authors"
+
+<PageTitle>Authors</PageTitle>
+
+<h1>Authors</h1>
+<p>This component lists all books from DAB using GraphQL.</p>
+<a href="@($"/addauthor")" class="btn btn-success">Create new author</a>
+<UseGetAuthors Context="result">
+<ChildContent>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>First name</th>
+                <th>Middle name</th>
+                <th>Last name</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var author in result.Authors.Items)
+            {
+                <tr>
+                    <td>@author.First_name</td>
+                    <td>@author.Middle_name</td>
+                    <td>@author.Last_name</td>
+                    <td>
+                        <a href="@($"/authordetails/{author.Id}")" class="btn btn-warning">Modify</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</ChildContent>
+</UseGetAuthors>

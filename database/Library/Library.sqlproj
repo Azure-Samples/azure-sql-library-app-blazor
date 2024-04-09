@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build">
+  <Sdk Name="Microsoft.Build.Sql" Version="0.1.12-preview" />
+  <PropertyGroup>
+    <Name>Library</Name>
+    <ProjectGuid>{633873F3-3E2C-4F92-988B-8AC11B72DD96}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.SqlAzureV12DatabaseSchemaProvider</DSP>
+    <ModelCollation>1033, CI</ModelCollation>
+  </PropertyGroup>
+  <ItemGroup>
+    <PreDeploy Include="preDeployment.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="postDeployment.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <SqlCmdVariable Include="devPassword">
+      <Value>$(SqlCmdVar__1)</Value>
+      <DefaultValue>P@ssw0rd!</DefaultValue>
+    </SqlCmdVariable>
+    <SqlCmdVariable Include="environment">
+      <Value>$(SqlCmdVar__3)</Value>
+      <DefaultValue>production</DefaultValue>
+    </SqlCmdVariable>
+    <SqlCmdVariable Include="prodPassword">
+      <Value>$(SqlCmdVar__2)</Value>
+      <DefaultValue>1L0v3D3vW1thSQL</DefaultValue>
+    </SqlCmdVariable>
+  </ItemGroup>
+  <Target Name="BeforeBuild">
+    <Delete Files="$(BaseIntermediateOutputPath)\project.assets.json" />
+  </Target>
+</Project>

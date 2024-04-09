@@ -1,0 +1,41 @@
+@page "/addauthor"
+@using BookManagementApp.Models
+@using BookManagementApp.Services
+@inject NavigationManager Navigation
+@inject AuthorService authorService
+
+<PageTitle>Add New Author</PageTitle>
+<h3>Author management</h3>
+<p>Add details for a new author</p>
+
+<form>
+    <div class="form-group">
+        <label for="firstname">First name</label>
+        <input type="text" id="firstname" @bind="@author.first_name" placeholder="Enter first name" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label for="middlename">Middle name</label>
+        <input type="text" id="middlename" @bind="@author.middle_name" placeholder="Enter middle name" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label for="lastname">Last name</label>
+        <input type="text" id="lastname" @bind="@author.last_name" placeholder="Enter last name" class="form-control" />
+    </div>
+</form>
+
+<div>
+    <br>
+    <button @onclick="AddNewAuthor" class="btn btn-success">Save</button>
+</div>
+
+@code {
+
+    private Author author = new Author();
+
+    private async Task AddNewAuthor()
+    {
+        await authorService.AddAuthorAsync(author);
+        // Optionally, you can navigate to a different page after adding the book
+        Navigation.NavigateTo("/authors");
+    }
+}

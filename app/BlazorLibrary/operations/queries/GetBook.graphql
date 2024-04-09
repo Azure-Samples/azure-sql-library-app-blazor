@@ -1,0 +1,21 @@
+query GetBookById($id: Int!) {
+    book_by_pk(id: $id) {
+        id
+        title
+        year
+        pages
+        authors {
+            items {
+                id
+            }
+        }
+    }
+
+    authors {
+        items {
+            id
+            first_name
+            last_name
+        }
+    }
+}
