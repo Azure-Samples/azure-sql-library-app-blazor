@@ -61,19 +61,6 @@ namespace BookManagementApp.Services
             var response = await _httpClient.PostAsJsonAsync("http://127.0.0.1:5001/api/Author", authorWithoutId);
             response.EnsureSuccessStatusCode(); 
         }
-
-        // public async Task<bool> AddAuthorAsync2(Author author)
-        // {
-        //     var authorWithoutId2 = new
-        //     {
-        //         author.first_name,
-        //         author.middle_name,
-        //         author.last_name
-        //     };
-
-        //     var response = await _httpClient.PostAsJsonAsync("http://127.0.0.1:5001/api/Author", authorWithoutId2);
-        //     return response.IsSuccessStatusCode;
-        // }
         
         public async Task<bool> UpdateAuthorAsync(Author author)
         {
