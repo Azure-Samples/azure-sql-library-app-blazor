@@ -1,4 +1,4 @@
-@page "/authordetails"
+@* @page "/authordetails" *@
 @page "/authordetails/{id}"
 @using BookManagementApp.Models
 @using BookManagementApp.Services
@@ -6,18 +6,18 @@
 @inject NavigationManager Navigation
 @inject AuthorService authorService
 
-@if(string.IsNullOrEmpty(Id))
+@* @if(string.IsNullOrEmpty(Id))
 {
     <PageTitle>Add New Author</PageTitle>
     <h3>Author management</h3>
     <p>Add details for a new author</p>
 }
 else
-{
+{ *@
     <PageTitle>Edit Author</PageTitle>
     <h3>Author details</h3>
     <p>Edit details for a existing author</p>
-}
+@* } *@
 
 <div class="row">
     <EditForm Model="@author" OnValidSubmit="@HandleValidRequest" OnInvalidSubmit="@HandleFailedRequest">
@@ -91,8 +91,8 @@ else
 
     protected async override Task OnInitializedAsync()
     {
-        if (!string.IsNullOrEmpty(Id))
-        {
+        @* if (!string.IsNullOrEmpty(Id))
+        { *@
             var authorId = Convert.ToInt32(Id);
             var apiAuthor = await authorService.GetAuthorByIdAsync(authorId);
             if (apiAuthor != null)
@@ -101,11 +101,11 @@ else
                 StateHasChanged();
                 Console.WriteLine($"Fetched author: {JsonSerializer.Serialize(author)}");
             }
-        }
-        else
-        {
+        @* } *@
+        @* else
+        { *@
             // Code for adding a new author goes here
-        if (string.IsNullOrEmpty(Id))
+        @* if (string.IsNullOrEmpty(Id))
             {
                 var result = await authorService.AddAuthorAsync2(author);
 
@@ -116,7 +116,7 @@ else
             }
             else
             {
-                author.Id = Convert.ToInt32(Id); // Add this line
+                author.id = Convert.ToInt32(Id); // Add this line
                 var result = await authorService.UpdateAuthorAsync(author);
 
                 if (result)
@@ -124,12 +124,12 @@ else
                 else
                     Message = "Failed to update author";
             }
-        }
+        } *@
     }
 
     protected async void HandleValidRequest()
     {
-        if (string.IsNullOrEmpty(Id))
+        @* if (string.IsNullOrEmpty(Id))
         {
             var result = await authorService.AddAuthorAsync2(author);
 
@@ -139,14 +139,14 @@ else
                 Message = "Failed to add author";
         }
         else
-        {
-            author.Id = Convert.ToInt32(Id); // Add this line
+        { *@
+            author.id = Convert.ToInt32(Id); // Add this line
             var result = await authorService.UpdateAuthorAsync(author);
 
             if (result)
                 Navigation.NavigateTo("/authors");
             else
                 Message = "Failed to update author";
-        }
+        @* } *@
     }
 }

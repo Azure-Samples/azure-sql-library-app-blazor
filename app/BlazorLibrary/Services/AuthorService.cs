@@ -12,9 +12,9 @@ using BookManagementApp.Extensions;
 namespace BookManagementApp.Services
 {
 
-    public class ApiResponse
+    public class AuthorResponse
     {
-        public List<Author>? Value { get; set; }
+        public List<Author> Value { get; set; }
     }
 
     public class AuthorService
@@ -30,11 +30,16 @@ namespace BookManagementApp.Services
         {
             try
             {
-                var response = await _httpClient.GetStreamAsync($"http://127.0.0.1:5001/api/Author/id/{id}");
-                var author = await JsonSerializer.DeserializeAsync<Author>(response, new JsonSerializerOptions
+                var responseStream = await _httpClient.GetStreamAsync($"http://127.0.0.1:5001/api/Author/id/{id}");
+                var reader = new StreamReader(responseStream);
+                var responseString = await reader.ReadToEndAsync();
+
+                var authorResponse = JsonSerializer.Deserialize<AuthorResponse>(responseString, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
                 });
+
+                var author = authorResponse.Value.FirstOrDefault();
                 return author;
             }
             catch (Exception ex)
@@ -42,7 +47,7 @@ namespace BookManagementApp.Services
                 Console.WriteLine($"Error fetching author: {ex}");
                 return null;
             }
-        } 
+        }
 
         public async Task AddAuthorAsync(Author author)
         {
@@ -57,18 +62,18 @@ namespace BookManagementApp.Services
             response.EnsureSuccessStatusCode(); 
         }
 
-        public async Task<bool> AddAuthorAsync2(Author author)
-        {
-            var authorWithoutId2 = new
-            {
-                author.first_name,
-                author.middle_name,
-                author.last_name
-            };
+        // public async Task<bool> AddAuthorAsync2(Author author)
+        // {
+        //     var authorWithoutId2 = new
+        //     {
+        //         author.first_name,
+        //         author.middle_name,
+        //         author.last_name
+        //     };
 
-            var response = await _httpClient.PostAsJsonAsync("http://127.0.0.1:5001/api/Author", authorWithoutId2);
-            return response.IsSuccessStatusCode;
-        }
+        //     var response = await _httpClient.PostAsJsonAsync("http://127.0.0.1:5001/api/Author", authorWithoutId2);
+        //     return response.IsSuccessStatusCode;
+        // }
         
         public async Task<bool> UpdateAuthorAsync(Author author)
         {
@@ -80,7 +85,7 @@ namespace BookManagementApp.Services
                 author.last_name
             };
 
-            var response = await _httpClient.PatchAsJsonAsync($"http://127.0.0.1:5001/api/Author/id/{author.Id}", authorWithoutId);
+            var response = await _httpClient.PatchAsJsonAsync($"http://127.0.0.1:5001/api/Author/id/{author.id}", authorWithoutId);
             return response.IsSuccessStatusCode;
         }
 

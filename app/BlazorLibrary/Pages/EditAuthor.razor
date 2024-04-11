@@ -1,0 +1,64 @@
+@page "/editauthor/{Id}"
+@using BookManagementApp.Models
+@using BookManagementApp.Services
+@using System.Text.Json
+@inject NavigationManager Navigation
+@inject AuthorService authorService
+
+<PageTitle>Edit Author</PageTitle>
+<h3>Author management</h3>
+<p>Edit details of existing author</p>
+
+<form>
+    <div class="form-group">
+        <label for="firstname">Id</label>
+        <input type="text" id="id" @bind="@author.id" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label for="firstname">First name</label>
+        <input type="text" id="firstname" @bind="@author.first_name" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label for="middlename">Middle name</label>
+        <input type="text" id="middlename" @bind="@author.middle_name" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label for="lastname">Last name</label>
+        <input type="text" id="lastname" @bind="@author.last_name" class="form-control" />
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <input type="button" class="btn btn-success" @onclick="@UpdateEmployee" value="Update author" />
+                <input type="button" class="btn btn-danger" @onclick="@Cancel" value="Cancel" />
+            </div>
+        </div>
+    </div>
+</form>
+
+@code {
+    @* protected Author author { get; set; } = new Author(); *@
+
+    [Parameter]
+    public string Id { get; set; }
+
+    Author author = new Author();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Console.WriteLine($"Id: {Id}");
+        author = await authorService.GetAuthorByIdAsync(Convert.ToInt32(Id));
+    }
+
+    private async Task UpdateEmployee()
+    {
+        await authorService.UpdateAuthorAsync(author);
+        Navigation.NavigateTo("/authors");
+    }
+
+    private void Cancel()
+    {
+        Navigation.NavigateTo("/authors");
+    }
+}
