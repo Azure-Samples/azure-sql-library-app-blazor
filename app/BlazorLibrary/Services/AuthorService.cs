@@ -20,17 +20,19 @@ namespace BookManagementApp.Services
     public class AuthorService
     {
         private readonly HttpClient _httpClient;
+        private string ApiUrl = "";
 
-        public AuthorService(HttpClient httpClient)
+        public AuthorService(HttpClient httpClient, IConfiguration Configuration)
         {
             _httpClient = httpClient;
+            ApiUrl = Configuration.GetValue<string>("ApiUrl");
         }
 
         public async Task<Author?> GetAuthorByIdAsync(int id)
         {
             try
             {
-                var responseStream = await _httpClient.GetStreamAsync($"http://127.0.0.1:5001/api/Author/id/{id}");
+                var responseStream = await _httpClient.GetStreamAsync($"{ApiUrl}/api/Author/id/{id}");
                 var reader = new StreamReader(responseStream);
                 var responseString = await reader.ReadToEndAsync();
 
@@ -58,7 +60,7 @@ namespace BookManagementApp.Services
                 author.last_name
             };
 
-            var response = await _httpClient.PostAsJsonAsync("http://127.0.0.1:5001/api/Author", authorWithoutId);
+            var response = await _httpClient.PostAsJsonAsync($"{ApiUrl}/api/Author", authorWithoutId);
             response.EnsureSuccessStatusCode(); 
         }
         
@@ -72,13 +74,13 @@ namespace BookManagementApp.Services
                 author.last_name
             };
 
-            var response = await _httpClient.PatchAsJsonAsync($"http://127.0.0.1:5001/api/Author/id/{author.id}", authorWithoutId);
+            var response = await _httpClient.PatchAsJsonAsync($"{ApiUrl}/api/Author/id/{author.id}", authorWithoutId);
             return response.IsSuccessStatusCode;
         }
 
         public async Task<bool> DeleteAuthorAsync(int id)
         {
-            var response = await _httpClient.DeleteAsync($"http://127.0.0.1:5001/api/Author/id/{id}");
+            var response = await _httpClient.DeleteAsync($"{ApiUrl}/api/Author/id/{id}");
             return response.IsSuccessStatusCode;
         }
     }

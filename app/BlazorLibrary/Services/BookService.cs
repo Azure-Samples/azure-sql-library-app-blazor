@@ -10,48 +10,77 @@ using BookManagementApp.Extensions;
 
 namespace BookManagementApp.Services
 {
-    
-        public class BookService
+    public class BookResponse
+    {
+        public List<Book> Value { get; set; }
+    }
+
+    public class BookService
+    {
+        private readonly HttpClient _httpClient;
+        private string ApiUrl = "";
+
+        public BookService(HttpClient httpClient, IConfiguration Configuration)
         {
-            private readonly HttpClient _httpClient;
+            _httpClient = httpClient;
+            ApiUrl = Configuration.GetValue<string>("ApiUrl");
+        }
 
-            public BookService(HttpClient httpClient)
+        public async Task<Book?> GetBookByIdAsync(int id)
+        {
+            try
             {
-                _httpClient = httpClient;
-            }
+                var responseStream = await _httpClient.GetStreamAsync($"{ApiUrl}/api/Book/id/{id}");
+                var reader = new StreamReader(responseStream);
+                var responseString = await reader.ReadToEndAsync();
 
-            public async Task AddBookAsync(Book book)
-            {
-
-                var bookWithoutId = new
+                var bookResponse = JsonSerializer.Deserialize<BookResponse>(responseString, new JsonSerializerOptions
                 {
-                    book.Title,
-                    book.Year,
-                    book.Pages
-                };
+                    PropertyNameCaseInsensitive = true
+                });
 
-                var response = await _httpClient.PostAsJsonAsync("http://127.0.0.1:5001/api/Book", bookWithoutId);
-                response.EnsureSuccessStatusCode(); // Throw on error status code
+                var book = bookResponse.Value.FirstOrDefault();
+                return book;
             }
-
-            public async Task<bool> UpdateBookAsync(Book book)
+            catch (Exception ex)
             {
-
-                var bookWithoutId = new
-                {
-                    book.Title,
-                    book.Year,
-                    book.Pages
-                };
-
-                var response = await _httpClient.PatchAsJsonAsync($"http://127.0.0.1:5001/api/Author/id/{book.Id}", bookWithoutId);
-                return response.IsSuccessStatusCode;
+                Console.WriteLine($"Error fetching author: {ex}");
+                return null;
             }
+        }
 
-            public async Task DeleteBookAsync(int id)
+        public async Task AddBookAsync(Book book)
+        {
+
+            var bookWithoutId = new
             {
-                var response = await _httpClient.DeleteAsync($"http://127.0.0.1:5001/api/Book/{id}");
-                response.EnsureSuccessStatusCode(); // Throw on error status code
-            }
+                title = book.Title,
+                year = book.Year,
+                pages = book.Pages
+            };
+
+            var response = await _httpClient.PostAsJsonAsync($"{ApiUrl}/api/Book", bookWithoutId);
+            response.EnsureSuccessStatusCode(); // Throw on error status code
+        }
+
+        public async Task<bool> UpdateBookAsync(Book book)
+        {
+
+            var bookWithoutId = new
+            {
+                title = book.Title,
+                year = book.Year,
+                pages = book.Pages
+            };
+
+            var response = await _httpClient.PatchAsJsonAsync($"{ApiUrl}/api/Book/id/{book.Id}", bookWithoutId);
+            return response.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> DeleteBookAsync(int id)
+        {
+            var response = await _httpClient.DeleteAsync($"{ApiUrl}/api/Book/{id}");
+            return response.IsSuccessStatusCode;
+        }
     }
 }

@@ -18,8 +18,10 @@ builder.Services.AddCors(options =>
     });
 });
 
+var url = builder.Configuration.GetValue<string>("ApiUrl");
+
 builder.Services.AddLibraryClient()
-    .ConfigureHttpClient(client => client.BaseAddress = new Uri("http://127.0.0.1:5001/graphql"));
+    .ConfigureHttpClient(client => client.BaseAddress = new Uri($"{url}/graphql"));
 
 builder.Services.AddScoped<BookService>();
 builder.Services.AddScoped<AuthorService>();

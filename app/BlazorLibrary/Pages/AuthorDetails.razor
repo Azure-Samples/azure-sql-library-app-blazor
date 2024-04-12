@@ -41,11 +41,6 @@
 
     [Parameter]
     public string? Id { get; set; }
-    private async Task ManageAuthor()
-    {
-        await authorService.AddAuthorAsync(author);
-        Navigation.NavigateTo("/books");
-    }
 
     protected void HandleFailedRequest()
     {
@@ -77,14 +72,7 @@
 
     protected async override Task OnInitializedAsync()
     {
-
-        author.id = Convert.ToInt32(Id); // Add this line
-        var result = await authorService.UpdateAuthorAsync(author);
-
-        if (result)
-            Navigation.NavigateTo("/authors");
-        else
-            Message = "Failed to update author";
+        author = await authorService.GetAuthorByIdAsync(int.Parse(Id));
     }
 
     protected async void HandleValidRequest()
