@@ -5,31 +5,31 @@
 @inject NavigationManager Navigation
 @inject AuthorService authorService
 
-    <PageTitle>Edit Author</PageTitle>
-    <h3>Author details</h3>
-    <p>Edit details for a existing author</p>
+<PageTitle>Edit Author</PageTitle>
+<h3>Author details</h3>
+<p>Edit details for a existing author</p>
 
 <div class="row">
     <EditForm Model="@author" OnValidSubmit="@HandleValidRequest" OnInvalidSubmit="@HandleFailedRequest">
         <div class="form-group">
             <label class="col-md-8">First name</label>
-            <InputText class="col-md-8 form-control" @bind-Value="@author.first_name"/>
+            <InputText class="col-md-8 form-control" @bind-Value="@author.first_name" />
         </div>
         <div class="form-group">
             <label class="col-md-8">Middle name</label>
-            <InputText class="col-md-8 form-control" @bind-Value="@author.middle_name"/>
+            <InputText class="col-md-8 form-control" @bind-Value="@author.middle_name" />
         </div>
         <div class="form-group">
             <label class="col-md-8">Last name</label>
-            <InputText class="col-md-8 form-control" @bind-Value="@author.last_name"/>
+            <InputText class="col-md-8 form-control" @bind-Value="@author.last_name" />
         </div>
-        <br/>
+        <br />
         <div class="form-group">
             <button type="submit" class="btn btn-success">Save author</button>
             <a @onclick="GoToAuthors" class="btn btn-primary">Back to authors</a>
             <a @onclick="@DeleteAuthor" class="btn btn-danger">Delete author</a>
         </div>
-        <br/>
+        <br />
         <p style="color: red">@Message</p>
     </EditForm>
 </div>
@@ -37,7 +37,7 @@
 @code {
 
     protected string Message = string.Empty;
-    protected Author author {get; set;} = new Author();
+    protected Author author { get; set; } = new Author();
 
     [Parameter]
     public string? Id { get; set; }
@@ -78,18 +78,24 @@
     protected async override Task OnInitializedAsync()
     {
 
-        author.id = Convert.ToInt32(Id); // Add this line
-        var result = await authorService.UpdateAuthorAsync(author);
-
-        if (result)
-            Navigation.NavigateTo("/authors");
+        var authorId = Convert.ToInt32(Id);
+        var apiAuthor = await authorService.GetAuthorByIdAsync(authorId);
+        if (apiAuthor != null)
+        {
+            author = apiAuthor;
+            StateHasChanged();
+            Console.WriteLine($"Fetched author: {JsonSerializer.Serialize(author)}");
+        }
         else
-            Message = "Failed to update author";
+        {
+            Message = "Author not found";
+        }
+
     }
 
     protected async void HandleValidRequest()
     {
-        author.id = Convert.ToInt32(Id); // Add this line
+        author.id = Convert.ToInt32(Id); // Set the id of the author
         var result = await authorService.UpdateAuthorAsync(author);
 
         if (result)
