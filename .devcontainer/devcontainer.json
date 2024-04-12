@@ -34,7 +34,6 @@
 				"ms-azuretools.vscode-bicep",
 				"ms-mssql.mssql",
 				"ms-vscode.vscode-node-azure-pack",
-				"ms-azuretools.vscode-docker",
 				"github.copilot",
 				"github.codespaces",
 				"postman.postman-for-vscode"
