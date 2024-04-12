@@ -5,12 +5,7 @@
 	"dockerComposeFile": "docker-compose.yml",
 	"service": "app",
 	"workspaceFolder": "/workspace",
-	// "containerEnv": {
-	// 	"SA_PASSWORD": "P@ssw0rd!"
-	// },
-	// "remoteEnv": {
-	// 	"SA_PASSWORD": "P@ssw0rd!"
-	// },
+
 	// Configure tool-specific properties.
 	"customizations": {
 		// Configure properties specific to VS Code.
@@ -37,7 +32,6 @@
 				"ms-dotnettools.csharp",
 				"ms-dotnettools.blazorwasm-companion",
 				"ms-azuretools.vscode-bicep",
-				"hashicorp.terraform",
 				"ms-mssql.mssql",
 				"ms-vscode.vscode-node-azure-pack",
 				"ms-azuretools.vscode-docker",
@@ -60,9 +54,6 @@
     // Post create commands to run after the container is created.
 	"postCreateCommand": "bash .devcontainer/sql/postCreateCommand.sh P@ssw0rd! './bin/Debug/' './.devcontainer/sql/'",
 
-	// Post start commands to run after the container is started.
-	//"postStartCommand": "cd dab && dab start --config=dab.config.json",
-
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	"features": {
 		"ghcr.io/devcontainers/features/azure-cli:1": {
@@ -70,13 +61,7 @@
 			"installUsingPython": true,
 			"version": "latest"
 		},
-		"ghcr.io/devcontainers/features/docker-outside-of-docker:1": {
-			"version": "latest"
-		},
 		"ghcr.io/azure/azure-dev/azd:latest": {
-			"version": "latest"
-		},
-		"ghcr.io/devcontainers/features/terraform:1": {
 			"version": "latest"
 		}
 	}
