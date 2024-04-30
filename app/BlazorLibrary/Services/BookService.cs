@@ -15,6 +15,11 @@ namespace BookManagementApp.Services
         public List<Book> Value { get; set; }
     }
 
+    public class BookAuthorIdResponse
+    {
+        public List<BookAuthorIdModel> Value { get; set; }
+    }
+
     public class BookService
     {
         private readonly HttpClient _httpClient;
@@ -40,6 +45,7 @@ namespace BookManagementApp.Services
                 });
 
                 var book = bookResponse.Value.FirstOrDefault();
+
                 return book;
             }
             catch (Exception ex)
@@ -49,7 +55,7 @@ namespace BookManagementApp.Services
             }
         }
 
-        public async Task AddBookAsync(Book book)
+        public async Task<BookResponse> AddBookAsync(Book book)
         {
 
             var bookWithoutId = new
@@ -60,6 +66,46 @@ namespace BookManagementApp.Services
             };
 
             var response = await _httpClient.PostAsJsonAsync($"{ApiUrl}/api/Book", bookWithoutId);
+            response.EnsureSuccessStatusCode(); // Throw on error status code
+
+            return await response.Content.ReadFromJsonAsync<BookResponse>();
+        }
+
+        public async Task<List<Author>?> GetBookAuthorsAsync(string bookId)
+        {
+
+            var responseAuthors = await _httpClient.GetFromJsonAsync<BookAuthorIdResponse>($"{ApiUrl}/api/BookAuthor?%24filter=book_id%20eq%20{bookId}");
+
+            if (responseAuthors != null){
+                var lstAuthorsIds = responseAuthors.Value.Select(x => "id eq " + x.author_id).ToList();
+
+                var authorsIds = string.Join(" or ", lstAuthorsIds);
+
+                if (lstAuthorsIds.Count() > 0){
+                    var authors = await _httpClient.GetFromJsonAsync<AuthorResponse>($"{ApiUrl}/api/Author?%24filter={authorsIds}");
+                    return authors.Value.ToList();
+                }
+            }
+
+            return new List<Author>();
+        }
+
+        public async Task AddAuthorBookAsync(int? BookId, int? AuthorId)
+        {
+
+            var bookWithoutId = new
+            {
+                author_id = AuthorId,
+                book_id = BookId
+            };
+
+            var response = await _httpClient.PostAsJsonAsync($"{ApiUrl}/api/BookAuthor", bookWithoutId);
+            response.EnsureSuccessStatusCode(); // Throw on error status code
+        }
+
+        public async Task DeleteAuthorBookAsync(int? BookId, int? AuthorId)
+        {
+            var response = await _httpClient.DeleteAsync($"{ApiUrl}/api/BookAuthor/author_id/{AuthorId}/book_id/{BookId}");
             response.EnsureSuccessStatusCode(); // Throw on error status code
         }
 

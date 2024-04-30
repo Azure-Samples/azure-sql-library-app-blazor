@@ -18,6 +18,11 @@ a, .btn-link {
     border-color: #1861ac;
 }
 
+.btn-danger {
+    background-color: #dc3545 !important;
+    border-color: #dc3545 !important;
+}
+
 .content {
     padding-top: 1.1rem;
 }

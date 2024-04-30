@@ -3,6 +3,7 @@
 @using BookManagementApp.Services
 @inject NavigationManager Navigation
 @inject BookService bookService
+@inject AuthorService authorService
 
 <h3>Book management</h3>
 <p>Add details for a new book</p>
@@ -20,20 +21,97 @@
         <label for="pages">Pages</label>
         <input type="number" id="pages" @bind="@book.Pages" placeholder="Number of pages" class="form-control" />
     </div>
+    <div class="form-group">
+            <label for="pages">Author</label>
+        </div>
+        <div class="input-group">
+            <select id="author" @bind="@AuthorId" class="form-control">
+                @foreach (var item in authors)
+                {
+                    <option value="@item.id">@item.first_name @item.last_name</option>
+                }
+            </select>
+            <button @onclick="AddAuthor" type="button" class="btn btn-success">Add Author</button>
+        </div>
+    <br>
+    <legend>Authors</legend>
+
+    <div class="form-group">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Author</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in lstAuthors)
+                {
+                    <tr>
+                        <td>@item.first_name @item.last_name</td>
+                        <td>
+                            <button @onclick="() => DeleteAuthor(item.id)" type="button" class="btn btn-danger">Delete Author</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        
+    </div>
 </form>
 
 <div>
     <br>
     <button @onclick="AddNewBook" class="btn btn-success">Save</button>
+    <a @onclick="GoToBooks" class="btn btn-primary">Back to books</a>
 </div>
 
 @code {
     private Book book = new Book();
+    private string? AuthorId = "";
+
+    private List<Author> authors = new List<Author>();
+
+    private List<Author> lstAuthors = new List<Author>();
+
+    protected async override Task OnInitializedAsync()
+    {
+        authors = await authorService.GetAuthors();
+
+        if (authors != null)
+            AuthorId = "" + authors.FirstOrDefault().id;
+    }
 
     private async Task AddNewBook()
     {
-        await bookService.AddBookAsync(book);
+        var newBook = await bookService.AddBookAsync(book);
+
+        foreach(var itm in lstAuthors){
+            await bookService.AddAuthorBookAsync(newBook.Value.FirstOrDefault().Id, itm.id);
+        }
+
         // Optionally, you can navigate to a different page after adding the book
+        Navigation.NavigateTo("/books");
+    }
+
+    private async Task AddAuthor()
+    {
+        var authId = int.Parse("" + AuthorId);
+        var itm = authors.Where(x => x.id == authId).FirstOrDefault();
+
+        if (!lstAuthors.Contains(itm)){
+            lstAuthors.Add(itm);
+        }
+    }
+
+    private void DeleteAuthor(int? id)
+    {
+        var itm = authors.Where(x => x.id == id).FirstOrDefault();
+        lstAuthors.Remove(itm);
+    }
+
+    protected void GoToBooks()
+    {
         Navigation.NavigateTo("/books");
     }
 }

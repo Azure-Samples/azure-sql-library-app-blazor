@@ -28,6 +28,29 @@ namespace BookManagementApp.Services
             ApiUrl = Configuration.GetValue<string>("ApiUrl");
         }
 
+        public async Task<List<Author>?> GetAuthors()
+        {
+            try
+            {
+                var responseStream = await _httpClient.GetStreamAsync($"{ApiUrl}/api/Author");
+                var reader = new StreamReader(responseStream);
+                var responseString = await reader.ReadToEndAsync();
+
+                var authorResponse = JsonSerializer.Deserialize<AuthorResponse>(responseString, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+
+                var authors = authorResponse.Value.ToList();
+                return authors;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error fetching author: {ex}");
+                return null;
+            }
+        }
+
         public async Task<Author?> GetAuthorByIdAsync(int id)
         {
             try
