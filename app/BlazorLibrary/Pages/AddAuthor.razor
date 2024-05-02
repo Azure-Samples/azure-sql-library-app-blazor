@@ -26,6 +26,7 @@
 <div>
     <br>
     <button @onclick="AddNewAuthor" class="btn btn-success">Save</button>
+    <a @onclick="GoToAuthors" class="btn btn-primary">Back to authors</a>
 </div>
 
 @code {
@@ -35,7 +36,13 @@
     private async Task AddNewAuthor()
     {
         await authorService.AddAuthorAsync(author);
-        // Optionally, you can navigate to a different page after adding the book
+
+        // Optionally, you can navigate to a different page after adding the Author
+        Navigation.NavigateTo("/authors");
+    }
+
+    protected void GoToAuthors()
+    {
         Navigation.NavigateTo("/authors");
     }
 }

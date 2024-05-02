@@ -1,4 +1,3 @@
-@* @page "/authordetails" *@
 @page "/authordetails/{id}"
 @using BookManagementApp.Models
 @using BookManagementApp.Services
@@ -42,11 +41,6 @@
 
     [Parameter]
     public string? Id { get; set; }
-    private async Task ManageAuthor()
-    {
-        await authorService.AddAuthorAsync(author);
-        Navigation.NavigateTo("/books");
-    }
 
     protected void HandleFailedRequest()
     {
@@ -78,20 +72,7 @@
 
     protected async override Task OnInitializedAsync()
     {
-
-        var authorId = Convert.ToInt32(Id);
-        var apiAuthor = await authorService.GetAuthorByIdAsync(authorId);
-        if (apiAuthor != null)
-        {
-            author = apiAuthor;
-            StateHasChanged();
-            Console.WriteLine($"Fetched author: {JsonSerializer.Serialize(author)}");
-        }
-        else
-        {
-            Message = "Author not found";
-        }
-
+        author = await authorService.GetAuthorByIdAsync(int.Parse(Id));
     }
 
     protected async void HandleValidRequest()

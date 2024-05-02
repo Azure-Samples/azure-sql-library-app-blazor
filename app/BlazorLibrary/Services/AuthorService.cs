@@ -20,17 +20,42 @@ namespace BookManagementApp.Services
     public class AuthorService
     {
         private readonly HttpClient _httpClient;
+        private string ApiUrl = "";
 
-        public AuthorService(HttpClient httpClient)
+        public AuthorService(HttpClient httpClient, IConfiguration Configuration)
         {
             _httpClient = httpClient;
+            ApiUrl = Configuration.GetValue<string>("ApiUrl");
+        }
+
+        public async Task<List<Author>?> GetAuthors()
+        {
+            try
+            {
+                var responseStream = await _httpClient.GetStreamAsync($"{ApiUrl}/api/Author");
+                var reader = new StreamReader(responseStream);
+                var responseString = await reader.ReadToEndAsync();
+
+                var authorResponse = JsonSerializer.Deserialize<AuthorResponse>(responseString, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+
+                var authors = authorResponse.Value.ToList();
+                return authors;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error fetching author: {ex}");
+                return null;
+            }
         }
 
         public async Task<Author?> GetAuthorByIdAsync(int id)
         {
             try
             {
-                var responseStream = await _httpClient.GetStreamAsync($"http://127.0.0.1:5001/api/Author/id/{id}");
+                var responseStream = await _httpClient.GetStreamAsync($"{ApiUrl}/api/Author/id/{id}");
                 var reader = new StreamReader(responseStream);
                 var responseString = await reader.ReadToEndAsync();
 
@@ -58,22 +83,9 @@ namespace BookManagementApp.Services
                 author.last_name
             };
 
-            var response = await _httpClient.PostAsJsonAsync("http://127.0.0.1:5001/api/Author", authorWithoutId);
+            var response = await _httpClient.PostAsJsonAsync($"{ApiUrl}/api/Author", authorWithoutId);
             response.EnsureSuccessStatusCode(); 
         }
-
-        // public async Task<bool> AddAuthorAsync2(Author author)
-        // {
-        //     var authorWithoutId2 = new
-        //     {
-        //         author.first_name,
-        //         author.middle_name,
-        //         author.last_name
-        //     };
-
-        //     var response = await _httpClient.PostAsJsonAsync("http://127.0.0.1:5001/api/Author", authorWithoutId2);
-        //     return response.IsSuccessStatusCode;
-        // }
         
         public async Task<bool> UpdateAuthorAsync(Author author)
         {
@@ -85,13 +97,13 @@ namespace BookManagementApp.Services
                 author.last_name
             };
 
-            var response = await _httpClient.PatchAsJsonAsync($"http://127.0.0.1:5001/api/Author/id/{author.id}", authorWithoutId);
+            var response = await _httpClient.PatchAsJsonAsync($"{ApiUrl}/api/Author/id/{author.id}", authorWithoutId);
             return response.IsSuccessStatusCode;
         }
 
         public async Task<bool> DeleteAuthorAsync(int id)
         {
-            var response = await _httpClient.DeleteAsync($"http://127.0.0.1:5001/api/Author/id/{id}");
+            var response = await _httpClient.DeleteAsync($"{ApiUrl}/api/Author/id/{id}");
             return response.IsSuccessStatusCode;
         }
     }

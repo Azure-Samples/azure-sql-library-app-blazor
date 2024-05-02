@@ -1,0 +1,191 @@
+@page "/BookDetails/{id}"
+@using BookManagementApp.Models
+@using BookManagementApp.Services
+@using System.Text.Json
+@inject NavigationManager Navigation
+@inject BookService bookService
+@inject AuthorService authorService
+
+    <PageTitle>Edit Book</PageTitle>
+    <h3>Book details</h3>
+    <p>Edit details for a existing book</p>
+
+<div class="row">
+    <EditForm Model="@book" OnValidSubmit="@HandleValidRequest" OnInvalidSubmit="@HandleFailedRequest">
+        <div class="form-group">
+            <label for="title" class="col-md-8">Title</label>
+            <InputText class="col-md-8 form-control" @bind-Value="@book.Title" placeholder="Enter book title"/>
+        </div>
+        <div class="form-group">
+            <label for="year" class="col-md-8">Year</label>
+            <InputText class="col-md-8 form-control" @bind-Value="@book.Year" placeholder="Year published"/>
+        </div>
+        <div class="form-group">
+            <label for="pages" class="col-md-8">Pages</label>
+            <InputText class="col-md-8 form-control" @bind-Value="@book.Pages" placeholder="Number of pages"/>
+        </div>
+
+        <div class="form-group">
+            <label for="pages">Author</label>
+        </div>
+        <div class="input-group">
+            <select id="author" @bind="@AuthorId" class="form-control">
+                @foreach (var item in authors)
+                {
+                    <option value="@item.id">@item.first_name @item.last_name</option>
+                }
+            </select>
+            <button @onclick="AddAuthor" type="button" class="btn btn-success">Add Author</button>
+        </div>
+        <br>
+        <legend>Authors</legend>
+
+        <div class="form-group">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Author</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in lstAuthors)
+                    {
+                        <tr>
+                            <td>@item.first_name @item.last_name</td>
+                            <td>
+                                <button @onclick="() => DeleteAuthor(item.id)" type="button" class="btn btn-danger">Delete Author</button>
+                            </td>
+                        </tr>
+                        
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <br/>
+        <div class="form-group">
+            <button type="submit" class="btn btn-success">Save book</button>
+            <a @onclick="GoToBooks" class="btn btn-primary">Back to books</a>
+            <a @onclick="@DeleteBook" class="btn btn-danger">Delete book</a>
+        </div>
+        <br/>
+        <p style="color: red">@Message</p>
+    </EditForm>
+</div>
+
+@code {
+
+    protected string Message = string.Empty;
+    protected BookModel book {get; set;} = new BookModel();
+    protected Book bookResponse {get; set;} = new Book();
+
+    private string? AuthorId = "";
+
+    private List<Author> authors = new List<Author>();
+
+    private List<Author> lstAuthors = new List<Author>();
+
+    [Parameter]
+    public string? Id { get; set; }
+
+    protected void HandleFailedRequest()
+    {
+        Message = "Invalid form data";
+    }
+
+    protected void GoToBooks()
+    {
+        Navigation.NavigateTo("/books");
+    }
+
+    protected async Task DeleteBook()
+    {
+        if (!string.IsNullOrEmpty(Id))
+        {
+            var bookId = Convert.ToInt32(Id);
+            var result = await bookService.DeleteBookAsync(bookId);
+
+            if (result)
+            {
+                Navigation.NavigateTo("/books");
+            }
+            else
+            {
+                Message = "Failed to delete book";
+            }
+        }
+    }
+
+    protected async override Task OnInitializedAsync()
+    {
+        bookResponse = await bookService.GetBookByIdAsync(int.Parse(Id));
+
+        lstAuthors = await bookService.GetBookAuthorsAsync(Id);
+
+        book.Title = bookResponse.Title;
+
+        if (bookResponse.Year != null){
+            book.Year = $"{bookResponse.Year}";
+        }
+
+        if (bookResponse.Pages != null){
+            book.Pages = $"{bookResponse.Pages}";
+        }
+
+         authors = await authorService.GetAuthors();
+
+        if (authors != null)
+            AuthorId = "" + authors.FirstOrDefault().id;
+
+        
+    }
+
+    private async Task AddAuthor()
+    {
+        var authId = int.Parse("" + AuthorId);
+        
+
+        if (lstAuthors.Where(x => x.id == authId).Count() == 0){
+            var itm = authors.Where(x => x.id == authId).FirstOrDefault();
+            lstAuthors.Add(itm);
+
+            await bookService.AddAuthorBookAsync(int.Parse(Id), itm.id);
+        }
+    }
+
+    private async Task DeleteAuthor(int? id)
+    {
+        var itm = lstAuthors.Where(x => x.id == id).FirstOrDefault();
+        lstAuthors.Remove(itm);
+
+        await bookService.DeleteAuthorBookAsync(int.Parse(Id), id);
+
+        StateHasChanged();
+    }
+
+
+    protected async void HandleValidRequest()
+    {
+        var newBook = new Book();
+
+        newBook.Id = Convert.ToInt32(Id);
+
+        newBook.Title = book.Title;
+
+        if (book.Year != ""){
+            newBook.Year = int.Parse(book.Year);
+        }
+
+        if (book.Pages != ""){
+            newBook.Pages = int.Parse(book.Pages);
+        }
+
+        var result = await bookService.UpdateBookAsync(newBook);
+
+        if (result)
+            Navigation.NavigateTo("/books");
+        else
+            Message = "Failed to update book";
+    }
+}

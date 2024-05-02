@@ -14,6 +14,7 @@
                     <th>Year</th>
                     <th>Pages</th>
                     <th>Author(s)</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -24,6 +25,9 @@
                         <td>@book.Year</td>
                         <td>@book.Pages</td>
                         <td>@string.Join(", ", book.Authors.Items.Select(a => $"{a.First_name} {a.Last_name}"))</td>
+                        <td>
+                        <a href="@($"/BookDetails/{book.Id}")" class="btn btn-warning">Modify</a>
+                    </td>
                     </tr>
                 }
             </tbody>
