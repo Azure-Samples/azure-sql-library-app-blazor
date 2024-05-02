@@ -1,6 +1,32 @@
-# Try Out Development Containers: Data API builder & Azure SQL
+---
+page_type: sample
+languages:
+- azdeveloper
+- csharp
+- sql
+- tsql
+- html
+- razor
+products:
+- sql-server
+- azure-sql-database
+- dotnet
+
+urlFragment: azure-sql-library-app-blazor
+name: Sample Library App: SQL Server, Data API builder, and Blazor Environment
+description: Library app built with SQL Server and Data API builder as backend, and Blazor as frontend. 
+---
+<!-- YAML front-matter schema: https://review.learn.microsoft.com/en-us/help/contribute/samples/process/onboarding?branch=main#supported-metadata-fields-for-readmemd -->
+
+# Sample Library App: SQL Server, Data API builder, and Blazor Environment
+> This documentation provides an in-depth guide to setting up and utilizing the development environment for the Library App.
 
 [![Open in Remote - Containers](https://img.shields.io/static/v1?label=Remote%20-%20Containers&message=Open&color=blue&logo=visualstudiocode)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/microsoft/vscode-remote-try-dab)
+
+
+## Overview
+
+The Data API builder and SQL Server dev container template offers a streamlined environment for developing applications with a backend powered by SQL Server and Data API Builder, along with a Blazor frontend. This template provides a consistent development environment across different machines and ensures compatibility with your application stack.
 
 A **development container** is a running [Docker](https://www.docker.com) container with a well-defined tool/runtime stack and its prerequisites. You can try out development containers with **[GitHub Codespaces](https://github.com/features/codespaces)** or **[Visual Studio Code Remote - Containers](https://aka.ms/vscode-remote/containers)**.
 
@@ -42,13 +68,17 @@ Follow these steps to open this sample in a container using the VS Code Dev Cont
 
 ### About this template
 
-This template creates two containers, one for the Dev Container that includes .NET and Data API builder and one for Microsoft SQL Server. You will be connected to the Ubuntu, and from within that container the MS SQL container will be available on **`localhost`** port 1433. The Data API builder container also includes supporting scripts in the `.devcontainer/sql` folder used to configure the `Library` sample database.  
+This template sets up two containers: one for the Dev Container housing .NET and Data API Builder, and another for Microsoft SQL Server. Upon connection, you'll find yourself in an Ubuntu environment, with easy access to the SQL Server container on localhost port 1433. Within the Dev Container, you'll discover supporting scripts located in the .devcontainer/sql folder, essential for configuring the Library sample database.
 
-The SQL container is deployed from the latest developer edition of Microsoft SQL 2022. The database(s) are made available directly in the VS Code through the MSSQL extension with a connection labeled "LocalDev".  The default `sa` user password is set to `P@ssw0rd!`. The default SQL port is mapped to port `1433` in `.devcontainer/docker-compose.yml`.
+The SQL container runs on the latest developer edition of Microsoft SQL 2022. Within VS Code, databases are conveniently accessible through the MSSQL extension, labeled "LocalDev". The default sa user password is `P@ssw0rd!`, and SQL port `1433` is the default, as defined in `.devcontainer/docker-compose.yml`. Additionally, database setup occurs when the Dev Container is started, employing the `.devcontainer/sql/postCreateCommand.sh` file. The `.devcontainer/sql/library.azure-sql.sql` script is utilized to create the library database and its objects. Moreover, a SQL Database project is included, offering the means to locally update the database. Pre and post scripts ensure the utilization of static data for demo purposes.
 
-Data API builder is installed in the .NET container. This sample repository includes a preconfigured database, that is used by DAB to create a graphQL endpoint. If you wan to run some manual tests, you can use the  `dab_http_request.sh` file included in the `scripts`folder. This `sh` file includes multiple http request calls you can to understand how the Data API builder to interact with the SQL server.
+Data API Builder is seamlessly integrated into the .NET container. Included in this repository is a preconfigured database, utilized by DAB to generate REST and GraphQL endpoints. For manual testing, leverage the `dab_http_request.sh` file found in the `scripts` folder. This script offers multiple HTTP request calls, aiding in understanding Data API Builder's interactions with the SQL server. Data API Builder provides a Swagger UI accessible at `http://127.0.0.1:5001/swagger` for exploring and testing REST endpoints. Additionally, a GraphQL endpoint is available at `http://127.0.0.1:5001/graphql`, powered by Banana Cakepop utility, enabling intuitive interaction with the GraphQL layer.
 
-The Blazor project is a simple web application that uses Data API builder graphQL endpoint to interact with the SQL server. The Blazor project is started using the `dotnet watch run` command in the `app/BlazorLibrary` directory. 
+Furthermore, the Blazor project, a simple web application, serves as the frontend for this development environment. It seamlessly integrates with Data API Builder's GraphQL and REST endpoints, providing a user-friendly interface for interacting with the SQL server. Leveraging the power of Data API Builder, the Blazor project facilitates smooth communication between the frontend and backend components, ensuring efficient data retrieval and manipulation.
+
+By harnessing Data API Builder's capabilities, the Blazor project simplifies the development process, enabling developers to focus on building robust, feature-rich web applications without the complexities of backend infrastructure. Whether it's fetching data from the SQL server, executing complex queries, or performing CRUD operations, the Blazor project provides a seamless and intuitive user experience for interacting with the underlying data layer.
+
+To get started with this project, simple execute the [VS Code Tasks](#VS-Code-Tasks) from the next section section. These tasks will help you to  run Data API builder, also to trust the HTTPS certificate for the Blazor project, and run the Blazor project. 
 
 #### VS Code Tasks
 
@@ -58,6 +88,10 @@ We have added several tasks to this repository to help with common actions. You 
 2. Type "Run Task" and select "Tasks: Run Task".
 3. Choose the task you want to run from the list.
 
+##### Execute SQL Query
+
+This task opens the `verifyDatabase.sql` file in your workspace and executes the SQL query in it. It uses the `ms-mssql.mssql` extension to execute the query. This task is part of the build group and is the default task that runs when you run the build task group.
+
 ##### Run DAB
 
 This task starts the DAB server with the specified configuration file. It runs the command `dab start --config=dab.config.json --no-https-redirect` in the `dab` directory of your workspace.
@@ -66,21 +100,19 @@ This task starts the DAB server with the specified configuration file. It runs t
 
 This task builds the SQL Database project. It runs the command `dotnet build` in the `database/Library` directory of your workspace.
 
-##### Build Blazor project
-
-This task builds the Blazor project. It runs the command `dotnet build` in the `app/BlazorLibrary` directory of your workspace.
+This task is not required to run the application, but it is useful to verify the database schema. You can use this SQL Database project to make changes to the database schema and deploy it to the SQL Server container.
 
 ##### Trust HTTPS certificate for Blazor project
 
 This task trusts the HTTPS certificate for the Blazor project. It runs the command `dotnet dev-certs https --trust` in the `app/BlazorLibrary` directory of your workspace.
 
+##### Build Blazor project
+
+This task builds the Blazor project. It runs the command `dotnet build` in the `app/BlazorLibrary` directory of your workspace.
+
 ##### Run Blazor project
 
 This task runs the Blazor project. It runs the command `dotnet watch run` in the `app/BlazorLibrary` directory of your workspace.
-
-##### Execute SQL Query
-
-This task opens the `verifyDatabase.sql` file in your workspace and executes the SQL query in it. It uses the `ms-mssql.mssql` extension to execute the query. This task is part of the build group and is the default task that runs when you run the build task group.
 
 #### Changing the sa password
 
@@ -115,25 +147,3 @@ This project uses the `5000` and `5001` ports for DAB, and the port `1433` for S
 > **Note:** You can add additional ports to this list as needed.
 
 The `ports` property in `docker-compose.yml` [publishes](https://docs.docker.com/config/containers/container-networking/#published-ports) rather than forwards the port. This will not work in a cloud environment like Codespaces and applications need to listen to `*` or `0.0.0.0` for the application to be accessible externally. Fortunately the `forwardPorts` property does not have this limitation.
-
-## Contributing
-
-This project welcomes contributions and suggestions.  Most contributions require you to agree to a
-Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
-the rights to use your contribution. For details, visit https://cla.opensource.microsoft.com.
-
-When you submit a pull request, a CLA bot will automatically determine whether you need to provide
-a CLA and decorate the PR appropriately (e.g., status check, comment). Simply follow the instructions
-provided by the bot. You will only need to do this once across all repos using our CLA.
-
-This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
-For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
-contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
-
-## Trademarks
-
-This project may contain trademarks or logos for projects, products, or services. Authorized use of Microsoft 
-trademarks or logos is subject to and must follow 
-[Microsoft's Trademark & Brand Guidelines](https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks/usage/general).
-Use of Microsoft trademarks or logos in modified versions of this project must not cause confusion or imply Microsoft sponsorship.
-Any use of third-party trademarks or logos are subject to those third-party's policies.

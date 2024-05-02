@@ -49,9 +49,7 @@
             "command": "code",
             "args": [
                 "--goto",
-                "${workspaceFolder}/scripts/verifyDatabase.sql",
-                "ms-mssql.mssql",
-                "mssql.execute"
+                "${workspaceFolder}/scripts/verifyDatabase.sql"
             ],
             "group": {
                 "kind": "build",
