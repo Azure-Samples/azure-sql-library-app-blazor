@@ -12,7 +12,7 @@ products:
 - azure-sql-database
 - dotnet
 urlFragment: azure-sql-library-app-blazor
-name: Sample Library App
+name: Sample Library App - SQL Server and Data API builder with Blazor
 description: Library app built with SQL Server and Data API builder as backend, and Blazor as frontend. 
 ---
 <!-- YAML front-matter schema: https://review.learn.microsoft.com/en-us/help/contribute/samples/process/onboarding?branch=main#supported-metadata-fields-for-readmemd -->
