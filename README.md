@@ -11,9 +11,11 @@ products:
 - sql-server
 - azure-sql-database
 - dotnet
+urlFragment: azure-sql-library-app-blazor
 name: Sample Library App
 description: Library app built with SQL Server and Data API builder as backend, and Blazor as frontend. 
 ---
+<!-- YAML front-matter schema: https://review.learn.microsoft.com/en-us/help/contribute/samples/process/onboarding?branch=main#supported-metadata-fields-for-readmemd -->
 
 # Sample Library App: SQL Server, Data API builder, and Blazor Environment
 > This documentation provides an in-depth guide to setting up and utilizing the development environment for the Library App.
