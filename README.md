@@ -1,21 +1,27 @@
 ---
 page_type: sample
 languages:
-- azdeveloper
+- bash
 - csharp
+- data-api-builder
+- dotnetcli
+- dockerfile
+- html
+- graphql
+- javascript
+- md
 - sql
 - tsql
-- html
-- razor
+- xml
+- yml
 products:
-- sql-server
 - azure-sql-database
-- dotnet
-urlFragment: azure-sql-library-app-blazor
+- blazor
+- github
 name: Sample Library App - SQL Server and Data API builder with Blazor
+urlFragment: azure-sql-library-app-blazor
 description: Library app built with SQL Server and Data API builder as backend, and Blazor as frontend. 
 ---
-<!-- YAML front-matter schema: https://review.learn.microsoft.com/en-us/help/contribute/samples/process/onboarding?branch=main#supported-metadata-fields-for-readmemd -->
 
 # Sample Library App: SQL Server, Data API builder, and Blazor Environment
 > This documentation provides an in-depth guide to setting up and utilizing the development environment for the Library App.
