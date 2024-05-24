@@ -37,7 +37,7 @@ A **development container** is a running [Docker](https://www.docker.com) contai
 
 This is a sample project that lets you try out either option in a few easy steps. We have a variety of other [vscode-remote-try-*](https://github.com/search?q=org%3Amicrosoft+vscode-remote-try-&type=Repositories) sample projects, too.
 
-> **Note:** If you already have a Codespace or dev container, you can jump to the [About this template](#About-this-template) section.
+> **Note:** If you already have a Codespace or dev container, you can jump to the [About this template](#about-this-template) section.
 
 
 ## Setting up the development container
@@ -83,7 +83,7 @@ Furthermore, the Blazor project, a simple web application, serves as the fronten
 
 By harnessing Data API Builder's capabilities, the Blazor project simplifies the development process, enabling developers to focus on building robust, feature-rich web applications without the complexities of backend infrastructure. Whether it's fetching data from the SQL server, executing complex queries, or performing CRUD operations, the Blazor project provides a seamless and intuitive user experience for interacting with the underlying data layer.
 
-To get started with this project, simple execute the [VS Code Tasks](#VS-Code-Tasks) from the next section section. These tasks will help you to  run Data API builder, also to trust the HTTPS certificate for the Blazor project, and run the Blazor project. 
+To get started with this project, simple execute the [VS Code Tasks](#vs-code-tasks) from the next section section. These tasks will help you to  run Data API builder, also to trust the HTTPS certificate for the Blazor project, and run the Blazor project. 
 
 #### VS Code Tasks
 
