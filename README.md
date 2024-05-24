@@ -13,7 +13,7 @@ languages:
 - sql
 - tsql
 - xml
-- yml
+- yaml
 products:
 - azure-sql-database
 - blazor
