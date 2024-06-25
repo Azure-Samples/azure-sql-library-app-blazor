@@ -1,9 +1,19 @@
 # [Choice] .NET version: 6.0-focal, 7.0-bullseye
-ARG VARIANT="6.0-focal"
+#RUN curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | sudo gpg --dearmor -o /usr/share/keyrings/microsoft-prod.gpg
+
+ARG VARIANT="dev-6.0-focal"
 FROM mcr.microsoft.com/devcontainers/dotnet:${VARIANT}
 
 # Add .NET global tools path
 ENV PATH $PATH:/home/vscode/.dotnet:/home/vscode/.dotnet/tools
+
+# Import Microsoft Signing Keys
+# https://learn.microsoft.com/dotnet/core/install/linux-ubuntu#unable-to-locate--some-packages-could-not-be-installed
+RUN sudo apt-get install -y gpg wget \
+    && wget https://packages.microsoft.com/keys/microsoft.asc \
+    && cat microsoft.asc | gpg --dearmor -o microsoft.asc.gpg \
+    && sudo mv microsoft.asc.gpg /etc/apt/trusted.gpg.d/ \
+    && sudo chown root:root /etc/apt/trusted.gpg.d/microsoft.asc.gpg
 
 # Install additional OS packages
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
