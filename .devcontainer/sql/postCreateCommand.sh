@@ -4,8 +4,8 @@ sqlfiles="false"
 SApassword=$1
 dacpath=$2
 sqlpath=$3
-
 echo "SELECT * FROM SYS.DATABASES" | dd of=testsqlconnection.sql
+
 for i in {1..60};
 do
     sqlcmd -S localhost -U sa -P $SApassword -d master -i testsqlconnection.sql > /dev/null
@@ -19,7 +19,6 @@ do
     fi
 done
 rm testsqlconnection.sql
-
 for f in $dacpath/*
 do
     if [ $f == $dacpath/*".dacpac" ]
@@ -28,7 +27,6 @@ do
         echo "Found dacpac $f"
     fi
 done
-
 for f in $sqlpath/*
 do
     if [ $f == $sqlpath/*".sql" ]
@@ -37,7 +35,6 @@ do
         echo "Found SQL file $f"
     fi
 done
-
 if [ $sqlfiles == "true" ]
 then
     for f in $sqlpath/*
@@ -49,7 +46,6 @@ then
         fi
     done
 fi
-
 if [ $dacpac == "true" ] 
 then
     for f in $dacpath/*
@@ -62,7 +58,6 @@ then
         fi
     done
 fi
-
 if [ $SApassword == "P@ssw0rd!" ]
 then
     echo "$(tput setaf 1)WARNING$(tput sgr0): you are using the default sample password. If you want to change it, execute the following command"
