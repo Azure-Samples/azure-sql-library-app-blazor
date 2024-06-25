@@ -6,6 +6,7 @@ dacpath=$2
 sqlpath=$3
 
 echo "SELECT * FROM SYS.DATABASES" | dd of=testsqlconnection.sql
+
 for i in {1..60};
 do
     sqlcmd -S localhost -U sa -P $SApassword -d master -i testsqlconnection.sql > /dev/null
