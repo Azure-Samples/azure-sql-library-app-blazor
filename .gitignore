@@ -5,9 +5,6 @@ project.lock.json
 *.pyc
 nupkg/
 
-# User-specific files
-!database/Library/bin/Debug/
-
 # Ignore specific bin/Debug directory
 app/BlazorLibrary/bin/Debug
 app/BlazorLibrary/obj/Debug
@@ -37,7 +34,7 @@ app/BlazorLibrary/obj/Debug
 *.sln.docstates
 
 # Build results
-[Dd]ebug/
+# [Dd]ebug/
 [Dd]ebugPublic/
 [Rr]elease/
 [Rr]eleases/
@@ -45,7 +42,7 @@ x64/
 x86/
 build/
 bld/
-[Bb]in/
+# [Bb]in/
 [Oo]bj/
 [Oo]ut/
 msbuild.log
