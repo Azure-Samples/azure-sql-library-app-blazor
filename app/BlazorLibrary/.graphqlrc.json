@@ -5,7 +5,7 @@
     "strawberryShake": {
       "name": "LibraryClient",
       "namespace": "BookLibrary",
-      "url": "http://127.0.0.1:5000/graphql",
+      "url": "http://0.0.0.0:5000/graphql",
       "records": {
         "inputs": false,
         "entities": false
