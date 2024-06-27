@@ -24,7 +24,7 @@
 						"trustServerCertificate": true
 					}
 				],
-				"sqlDatabaseProjects.dotnetSDK Location": "/usr/share/dotnet/sdk",
+				"sqlDatabaseProjects.dotnetSDK Location": "/usr/share/dotnet/sdk/",
 				"remote.localPortHost": "allInterfaces",
 				"remote.SSH.remoteServerListenOnSocket": true
 			},
