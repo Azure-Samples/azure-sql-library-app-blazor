@@ -1,7 +1,7 @@
 // For format details, see https://aka.ms/devcontainer.json. 
 // For config options, see the README at: https://github.com/devcontainers/templates/tree/main/src/dotnet-mssql
 {
-	"name": "Data API builder and SQL Server",
+	"name": "Data API builder and Azure SQL",
 	"dockerComposeFile": "docker-compose.yml",
 	"service": "app",
 	"workspaceFolder": "/workspace",
@@ -18,13 +18,15 @@
 						"database": "master",
 						"authenticationType": "SqlLogin",
 						"user": "sa",
-						"password": "P@ssw0rd!",
+						"password": "${env:SA_PASSWORD}",
 						"savePassword": true,
 						"profileName": "LocalDev",
 						"trustServerCertificate": true
 					}
 				],
-				"sqlDatabaseProjects.dotnetSDK Location": "/usr/share/dotnet/sdk/6.0.414"
+				"sqlDatabaseProjects.dotnetSDK Location": "/usr/share/dotnet/sdk",
+				"remote.localPortHost": "allInterfaces",
+				"remote.SSH.remoteServerListenOnSocket": true
 			},
 			// Add the IDs of extensions you want installed when the container is created.
 			"extensions": [
@@ -43,8 +45,8 @@
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	"forwardPorts": [5000, 5001, 1433],
 
-    // Post create commands to run after the container is created.
-	"postCreateCommand": "bash .devcontainer/sql/postCreateCommand.sh P@ssw0rd! './bin/Debug/' './.devcontainer/sql/'",
+	// Post create commands to run after the container is created.
+	"postCreateCommand": "bash .devcontainer/sql/postCreateCommand.sh 'database/Library/bin/Debug'",
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	"features": {

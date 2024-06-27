@@ -8,24 +8,7 @@
     <ModelCollation>1033, CI</ModelCollation>
   </PropertyGroup>
   <ItemGroup>
-    <PreDeploy Include="preDeployment.sql" />
-  </ItemGroup>
-  <ItemGroup>
     <PostDeploy Include="postDeployment.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <SqlCmdVariable Include="devPassword">
-      <Value>$(SqlCmdVar__1)</Value>
-      <DefaultValue>P@ssw0rd!</DefaultValue>
-    </SqlCmdVariable>
-    <SqlCmdVariable Include="environment">
-      <Value>$(SqlCmdVar__3)</Value>
-      <DefaultValue>production</DefaultValue>
-    </SqlCmdVariable>
-    <SqlCmdVariable Include="prodPassword">
-      <Value>$(SqlCmdVar__2)</Value>
-      <DefaultValue>1L0v3D3vW1thSQL</DefaultValue>
-    </SqlCmdVariable>
   </ItemGroup>
   <Target Name="BeforeBuild">
     <Delete Files="$(BaseIntermediateOutputPath)\project.assets.json" />

@@ -20,11 +20,28 @@
             }
         },
         {
+            "label": "Deploy SQL Database project",
+            "type": "shell",
+            "command": "bash",
+            "args": [
+                ".devcontainer/sql/postCreateCommand.sh",
+                "database/Library/bin/Debug"
+            ]
+        },
+        {
             "label": "Build Blazor project",
             "type": "shell",
             "command": "dotnet build",
             "options": {
                 "cwd": "${workspaceFolder}/app/BlazorLibrary"
+            }
+        },
+        {
+            "label": "Trust HTTPS certificate for DAB",
+            "type": "shell",
+            "command": "dotnet dev-certs https",
+            "options": {
+                "cwd": "${workspaceFolder}/dab"
             }
         },
         {
@@ -38,23 +55,19 @@
         {
             "label": "Run Blazor project",
             "type": "shell",
-            "command": "dotnet watch run",
+            "command": "dotnet run",
             "options": {
                 "cwd": "${workspaceFolder}/app/BlazorLibrary"
             }
         },
         {
-            "label": "Execute SQL Query",
+            "label": "Verify database schema and data",
             "type": "shell",
             "command": "code",
             "args": [
                 "--goto",
                 "${workspaceFolder}/scripts/verifyDatabase.sql"
             ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
             "presentation": {
                 "reveal": "always",
                 "panel": "new"

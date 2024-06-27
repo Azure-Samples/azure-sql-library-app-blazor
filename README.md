@@ -18,26 +18,28 @@ products:
 - azure-sql-database
 - blazor
 - github
-name: Sample Library App - SQL Server and Data API builder with Blazor
+name: Sample Library App - Azure SQL and Data API builder with Blazor
 urlFragment: azure-sql-library-app-blazor
-description: Library app built with SQL Server and Data API builder as backend, and Blazor as frontend. 
+description: Library app built with Azure SQL and Data API builder as backend, and Blazor as frontend. 
 ---
 
-# Sample Library App: SQL Server, Data API builder, and Blazor Environment
+# Sample Library App: Azure SQL, Data API builder, and Blazor Environment
 > This documentation provides an in-depth guide to setting up and utilizing the development environment for the Library App.
 
-[![Open in Remote - Containers](https://img.shields.io/static/v1?label=Remote%20-%20Containers&message=Open&color=blue&logo=visualstudiocode)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/microsoft/vscode-remote-try-dab)
+[![Open in GitHub Codespaces](https://img.shields.io/static/v1?style=for-the-badge&label=GitHub+Codespaces&message=Open&color=brightgreen&logo=github)](https://codespaces.new/Azure-Samples/azure-sql-library-app-blazor/tree/main)
+[![Open in Dev Container](https://img.shields.io/static/v1?style=for-the-badge&label=Dev+Containers&message=Open&color=blue&logo=visualstudiocode)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/Azure-Samples/azure-sql-library-app-blazor/tree/main)
 
 
 ## Overview
 
-The Data API builder and SQL Server dev container template offers a streamlined environment for developing applications with a backend powered by SQL Server and Data API Builder, along with a Blazor frontend. This template provides a consistent development environment across different machines and ensures compatibility with your application stack.
+The Data API builder and Azure SQL dev container template offers a streamlined environment for developing applications with a backend powered by Azure SQL and Data API Builder, along with a Blazor frontend. This template provides a consistent development environment across different machines and ensures compatibility with your application stack.
 
 A **development container** is a running [Docker](https://www.docker.com) container with a well-defined tool/runtime stack and its prerequisites. You can try out development containers with **[GitHub Codespaces](https://github.com/features/codespaces)** or **[Visual Studio Code Remote - Containers](https://aka.ms/vscode-remote/containers)**.
 
 This is a sample project that lets you try out either option in a few easy steps. We have a variety of other [vscode-remote-try-*](https://github.com/search?q=org%3Amicrosoft+vscode-remote-try-&type=Repositories) sample projects, too.
 
-> **Note:** If you already have a Codespace or dev container, you can jump to the [About this template](#about-this-template) section.
+> **Note:** 
+> If you already have a Codespace or dev container, you can jump to the [About this template](#about-this-template) section.
 
 
 ## Setting up the development container
@@ -73,43 +75,53 @@ Follow these steps to open this sample in a container using the VS Code Dev Cont
 
 ### About this template
 
-This template sets up two containers: one for the Dev Container housing .NET and Data API Builder, and another for Microsoft SQL Server. Upon connection, you'll find yourself in an Ubuntu environment, with easy access to the SQL Server container on localhost port 1433. Within the Dev Container, you'll discover supporting scripts located in the .devcontainer/sql folder, essential for configuring the Library sample database.
+This template sets up two containers: one for the Dev Container housing .NET and Data API Builder, and another for Microsoft SQL Server. Upon connection, you'll find yourself in an Ubuntu environment, with easy access to the database container on localhost port 1433. Within the Dev Container, you'll discover supporting scripts located in the .devcontainer/sql folder, essential for configuring the Library sample database.
 
-The SQL container runs on the latest developer edition of Microsoft SQL 2022. Within VS Code, databases are conveniently accessible through the MSSQL extension, labeled "LocalDev". The default sa user password is `P@ssw0rd!`, and SQL port `1433` is the default, as defined in `.devcontainer/docker-compose.yml`. Additionally, database setup occurs when the Dev Container is started, employing the `.devcontainer/sql/postCreateCommand.sh` file. The `.devcontainer/sql/library.azure-sql.sql` script is utilized to create the library database and its objects. Moreover, a SQL Database project is included, offering the means to locally update the database. Pre and post scripts ensure the utilization of static data for demo purposes.
+The SQL container is deployed from the latest developer edition of Microsoft SQL 2022. The database(s) are made available directly in the Codespace/VS Code through the MSSQL extension with a connection labeled **LocalDev**. The default `sa` user password is set using the .devcontainer/.env file. The default SQL port is mapped to port `1433` in `.devcontainer/docker-compose.yml`.
 
-Data API Builder is seamlessly integrated into the .NET container. Included in this repository is a preconfigured database, utilized by DAB to generate REST and GraphQL endpoints. For manual testing, leverage the `dab_http_request.sh` file found in the `scripts` folder. This script offers multiple HTTP request calls, aiding in understanding Data API Builder's interactions with the SQL server. Data API Builder provides a Swagger UI accessible at `http://127.0.0.1:5001/swagger` for exploring and testing REST endpoints. Additionally, a GraphQL endpoint is available at `http://127.0.0.1:5001/graphql`, powered by Banana Cakepop utility, enabling intuitive interaction with the GraphQL layer.
+Data API builder is seamlessly integrated into the .NET container. Included in this repository is a preconfigured database, utilized by DAB to generate REST and GraphQL endpoints. For manual testing, leverage the `dab_http_request.sh` file found in the `scripts` folder. This script offers multiple HTTP request calls, aiding in understanding Data API Builder's interactions with the database. Data API Builder provides a Swagger UI accessible at `http://127.0.0.1:5000/swagger` for exploring and testing REST endpoints. Additionally, a GraphQL endpoint is available at `http://127.0.0.1:5000/graphql`, powered by Banana Cakepop utility, enabling intuitive interaction with the GraphQL layer.
 
-Furthermore, the Blazor project, a simple web application, serves as the frontend for this development environment. It seamlessly integrates with Data API Builder's GraphQL and REST endpoints, providing a user-friendly interface for interacting with the SQL server. Leveraging the power of Data API Builder, the Blazor project facilitates smooth communication between the frontend and backend components, ensuring efficient data retrieval and manipulation.
+Furthermore, the Blazor project, a simple web application, serves as the frontend for this development environment. It seamlessly integrates with Data API Builder's GraphQL and REST endpoints, providing a user-friendly interface for interacting with the database. Leveraging the power of Data API Builder, the Blazor project facilitates smooth communication between the frontend and backend components, ensuring efficient data retrieval and manipulation.
 
-By harnessing Data API Builder's capabilities, the Blazor project simplifies the development process, enabling developers to focus on building robust, feature-rich web applications without the complexities of backend infrastructure. Whether it's fetching data from the SQL server, executing complex queries, or performing CRUD operations, the Blazor project provides a seamless and intuitive user experience for interacting with the underlying data layer.
+By harnessing Data API Builder's capabilities, the Blazor project simplifies the development process, enabling developers to focus on building robust, feature-rich web applications without the complexities of backend infrastructure. Whether it's fetching data from the database, executing complex queries, or performing CRUD operations, the Blazor project provides a seamless and intuitive user experience for interacting with the underlying data layer.
 
 To get started with this project, simple execute the [VS Code Tasks](#vs-code-tasks) from the next section section. These tasks will help you to  run Data API builder, also to trust the HTTPS certificate for the Blazor project, and run the Blazor project. 
 
+> **Note:**
+> While the SQL Server container employs a standard version of SQL Server, all database development within this dev container can be validated for Azure SQL Database using the SQL Database Project. The SQL Database project is preconfigured with the target platform set as Azure SQL Database.
+
 #### VS Code Tasks
 
-We have added several tasks to this repository to help with common actions. You can access these tasks by opening the Command Palette in VS Code. Here's how:
+This dev container template includes multiple tasks that can help with common actions. You can access these tasks by opening the Command Palette in VS Code. Here's how:
 
-1. Press <kbd>F1</kbd> or <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd> to open the Command Palette.
+1. To open the Command Palette, press <kbd>F1</kbd> or <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>.
 2. Type "Run Task" and select "Tasks: Run Task".
 3. Choose the task you want to run from the list.
 
-##### Execute SQL Query
+##### Verify database schema and data
 
-This task opens the `verifyDatabase.sql` file in your workspace and executes the SQL query in it. It uses the `ms-mssql.mssql` extension to execute the query. This task is part of the build group and is the default task that runs when you run the build task group.
+This task opens the verifyDatabase.sql file in your workspace and executes the SQL query using the ms-mssql.mssql extension. This task is optional however it can help you to become familiar with the sample Library database tables and data included in this dev container template.
 
-##### Run DAB
+##### Run Data API builder (DAB)
 
 This task starts the DAB server with the specified configuration file. It runs the command `dab start --config=dab.config.json --no-https-redirect` in the `dab` directory of your workspace.
 
 ##### Build SQL Database project
 
-This task builds the SQL Database project. It runs the command `dotnet build` in the `database/Library` directory of your workspace.
+This task builds the SQL Database project. It runs the command dotnet build in the database/Library directory of your workspace.
 
-This task is not required to run the application, but it is useful to verify the database schema. You can use this SQL Database project to make changes to the database schema and deploy it to the SQL Server container.
+This task is optional, but it's useful to verify the database schema. You can use this SQL Database project to make changes to the database schema and deploy it to the SQL Server container.
+
+##### Trust HTTPS certificate for Data API builder
+
+This task trusts the HTTPS certificate for Data API builder. It runs the command `dotnet dev-certs https` in the `/dab` directory of your workspace.
 
 ##### Trust HTTPS certificate for Blazor project
 
 This task trusts the HTTPS certificate for the Blazor project. It runs the command `dotnet dev-certs https --trust` in the `app/BlazorLibrary` directory of your workspace.
+
+> **Note:**
+> Make sure to complete the certificate tasks before running the Blazor project.
 
 ##### Build Blazor project
 
@@ -121,15 +133,33 @@ This task runs the Blazor project. It runs the command `dotnet watch run` in the
 
 #### Changing the sa password
 
-To change the `sa` user password, change the value in `.devcontainer/docker-compose.yml` and `.devcontainer/devcontainer.json`.
+To adjust the sa password, you need to modify the `.env` file located within the `.devcontainer` directory. This password is crucial for the creation of the SQL Server container and the deployment of the Library database using the `database/Library/bin/Debug/Library.dacpac` file.
 
-#### Database deployment
+The password must comply with the following rules:
 
-By default, a  demo database is created titled "Library".  To add additional database objects or data through T-SQL during Codespace configuration, edit the file `.devcontainer/sql/library.azure-sql.sql` or place additional `.sql` files in the `.devcontainer/mssql/` folder. *Large numbers of scripts may take a few minutes following container creation to complete, even when the SQL server is available the database(s) may not be available yet.*
+- It should have a minimum length of eight characters.
+- It should include characters from at least three of the following categories: uppercase letters, lowercase letters, numbers, and nonalphanumeric symbols.
 
-You can also the SQL Database Projects extension to deploy the database schema. The `Library.sqlproj` project is located in the `database/Library` folder can be build using the `Build SQL Database project` task. The `verifyDatabase.sql` file in the `database/Library` folder can be used to verify the database schema.
+### Database deployment
 
-Alternatively, .dacpac files placed in the `./bin/Debug` folder will be published as databases in the container during Dev Container configuration. [SqlPackage](https://docs.microsoft.com/sql/tools/sqlpackage) is used to deploy a database schema from a data-tier application file (dacpac), allowing you to bring your application's database structures into the dev container easily. *The publish process may take a few minutes following container creation to complete, even when the server is available the database(s) may not be available yet.*
+By default, a demo database titled `Library` is created using a DAC package. The deployment process is automated through the `postCreateCommand.sh` script, which is specified in the devcontainer.json configuration:
+
+```json
+"postCreateCommand": "bash .devcontainer/sql/postCreateCommand.sh 'database/Library/bin/Debug'"
+```
+
+#### Automated Database Deployment
+
+The `postCreateCommand.sh` script handles the database deployment by performing the following steps:
+
+1. Loads the `SA_PASSWORD` from the `.env` file.
+1. Waits for the SQL Server to be ready by attempting to connect multiple times.
+1. Checks for .dacpac files in the specified directory (`database/Library/bin/Debug`).
+1. Deploys each .dacpac file found to the SQL Server.
+
+#### Using the SQL Database Projects Extension
+
+You can use the SQL Database Projects extension to deploy the database schema. The `Library.sqlproj` project is located in the `database/Library` folder and can be built using the Build SQL Database project task. The output .dacpac files should be placed in the `./bin/Debug` folder for deployment.
 
 ### Adding another service
 
@@ -149,6 +179,7 @@ This project uses the `5000` and `5001` ports for DAB, and the port `1433` for S
 ```json
 "forwardPorts": [5000, 5001, 1433]
 ```
-> **Note:** You can add additional ports to this list as needed.
+> **Note:**
+> You can add additional ports to this list as needed.
 
 The `ports` property in `docker-compose.yml` [publishes](https://docs.docker.com/config/containers/container-networking/#published-ports) rather than forwards the port. This will not work in a cloud environment like Codespaces and applications need to listen to `*` or `0.0.0.0` for the application to be accessible externally. Fortunately the `forwardPorts` property does not have this limitation.
